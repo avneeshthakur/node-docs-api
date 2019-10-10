@@ -3,9 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
+const dbUrl = process.env.DATABASE_URL || "mongodb://localhost:27017/node-docs";
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var docsRouter = require('./routes/docs');
 
 var app = express();
 
@@ -19,8 +22,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Configuration and connecting to Databse MongoDb
+mongoose.connect(dbUrl, {
+   useNewUrlParser: true,
+   useUnifiedTopology: true
+}, (err) => {
+   if (err) {
+      console.log('Connection Error: ', err);
+   } else {
+      console.log('Successfully Connected');
+   }
+});
+
+mongoose.Promise = global.Promise;
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/docs', docsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
