@@ -10,7 +10,8 @@ const secret = process.env.SECRET || 'docs-api-secret';
        let decoded = await jwt.verify(token, secret);
        let user = await  User.findOne({ email:decoded.email, _id : decoded.id });
           if (user) {
-              next(user)    
+              req.user = user;
+              next()    
              return null;
            } else {
             return res.status(401).json({
@@ -30,7 +31,6 @@ const secret = process.env.SECRET || 'docs-api-secret';
           message: 'Failed authentication: No Token Provided.'
         });
       }
-
    }
 
 module.exports = { authenticate };
