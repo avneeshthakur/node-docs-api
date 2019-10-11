@@ -20,7 +20,7 @@ const signupController = async (req, res, next) => {
       newUser = await newUser.save();
       return res
         .status(201)
-        .json({ status: true, message: "user created.", user: newUser });
+        .json({ status: true, message: "user created Successfully." });
     } else {
       return res
         .status(422)

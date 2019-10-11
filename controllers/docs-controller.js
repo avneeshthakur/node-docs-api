@@ -45,14 +45,14 @@ const getDocs = async (req, res, next) => {
 const downloadDoc = async (req, res, next) => {
   try {
     let id = req.params.id;
-    let doc = await Docs.findById({ _id: id });
+    let doc = await Docs.findOne({ _id: id, author:req.user._id });
     if (doc) {
 			const file = fs.createReadStream(doc.url);
 			res.setHeader('Content-Type', 'application/pdf');
 			res.setHeader('Content-Disposition', `attachment; filename=${doc.name}`);
 			file.pipe(res);
     } else {
-      return res.status(200).json({ status: false, message: "Doc Not Found." });
+      return res.status(404).json({ status: false, message: "Doc Not Found." });
     }
   } catch (err) {
     return res.status(500).json({ status: false, message: err.message });
@@ -75,7 +75,7 @@ const deleteDoc = async (req, res, next) => {
 			});
 			return res.status(200).json({ status: true, message: "Doc Deleted.", doc });
 		} else {
-			return res.status(200).json({ status: false, message: "Doc Not Found." });
+			return res.status(404).json({ status: false, message: "Doc Not Found." });
 		}
   } catch (err) {
     return res.status(500).json({ status: false, message: err.message });
