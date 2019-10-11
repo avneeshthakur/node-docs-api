@@ -7,7 +7,7 @@ const uploadDoc = async (req, res, next) => {
       fileFilter: pdfFileFilter,
       storage: storage
     }).single('doc');
-   upload(req, res, async (err) => {
+    upload(req, res, async (err) => {
   	 if(err) {
   	 	 return res.status(500).json({
           status: false,
@@ -26,17 +26,38 @@ const uploadDoc = async (req, res, next) => {
 
 // get docs
 const getDocs = async (req, res, next) => {
-
+	try {
+		let docs = await Docs.find();
+		return res.status(200).json({status:true, message:"All Docs", docs});
+	} catch(err) {
+		return res.status(500).json({status:false, message:err.message});
+	}
 };
 
 // download docs
 const downloadDoc = async (req, res, next) => {
-
+	try {
+		let id = req.params.id;
+		let doc = await Docs.findById({_id:id});
+		if(doc){
+			return res.status(200).json({status:true, message:"All Docs", doc});
+		} else {
+			return res.status(200).json({status:true, message:"All Docs", doc});
+		}
+	} catch(err) {
+		return res.status(500).json({status:false, message:err.message});
+	}
 };
 
 // delete docs
 const deleteDoc = async (req, res, next) => {
-
+	try {
+		let id = req.params.id;
+		let doc = await Docs.deleteOne({_id:id});
+		return res.status(200).json({status:true, message:"Doc Deleted.", doc});
+	} catch(err) {
+		return res.status(500).json({status:false, message:err.message});
+	}
 };
 
 module.exports = {

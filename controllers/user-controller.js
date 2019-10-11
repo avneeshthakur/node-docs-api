@@ -12,13 +12,12 @@ const signupController = async (req, res, next) => {
 	 	password:hashPass
 	 });
 	 let user = await User.findOne({email});
-	 if(user){
+	 if(!user){
 	  newUser = await newUser.save();
 	  return res.status(201).json({status:true, message:"user created.", user: newUser});
 	 } else {
 	  return res.status(422).json({status:false, message:"Email is already used"});
 	 }
-
   } catch(err) {
 	 return res.status(500).json({status:false, message:err.message});
   }
