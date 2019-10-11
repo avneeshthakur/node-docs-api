@@ -12,12 +12,12 @@ const { authenticate } = require('../middlewares/ensure-auth');
 router.post('/upload', authenticate, uploadDoc);
 
 /* get docs. */
-router.get('/getDocs', getDocs);
+router.get('/getDocs', authenticate, getDocs);
 
 /* download docs. */
-router.get('/download/:id', downloadDoc);
+router.get('/download/:id', authenticate, downloadDoc);
 
 /* delete docs. */
-router.delete('/delete/:id', downloadDoc);
+router.delete('/delete/:id', authenticate, deleteDoc);
 
 module.exports = router;

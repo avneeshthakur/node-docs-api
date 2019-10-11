@@ -4,7 +4,11 @@ const secret = process.env.SECRET || 'docs-api-secret';
 
 // middleware function to check the that user is authenticated 
  const authenticate = async (req, res, next) => {
-       const token = req.headers.authorization ;
+     let token;
+       if(req.headers.authorization)
+       token = req.headers.authorization;
+       else 
+       token = req.query.token;
        if (token) {
        try {
        let decoded = await jwt.verify(token, secret);

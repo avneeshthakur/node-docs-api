@@ -6,6 +6,10 @@ const docSchema = new mongoose.Schema({
   },
   url: {
     type: String
+  },
+  author:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User'
   }
  },
  {
